@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ query }} — Privacy Risk Report</title>
+
+    <style>
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 40px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 42px;
+            color: #1f5fbf;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 18px;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 18px 30px;
+            background: #1f5fbf;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #174d9c;
+        }
+
+        .summary {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .label {
+            color: #777;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .value {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        /* ------------------------------ */
+        /* Risk thermometer                */
+        /* ------------------------------ */
+
+        .risk-summary {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .risk-thermometer {
+            position: relative;
+            width: 34px;
+            height: 150px;
+            border-radius: 17px;
+            background: #eef1f5;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid #dfe3e8;
+            margin-left: 6px;
+        }
+
+        .risk-thermometer-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: {{ risk.score }}%;
+            border-radius: 0 0 15px 15px;
+            transition: height 0.6s ease;
+        }
+
+        .risk-thermometer-fill.risk-level-low {
+            background: linear-gradient(to top, #16a34a, #4ade80);
+        }
+
+        .risk-thermometer-fill.risk-level-medium {
+            background: linear-gradient(to top, #d97706, #fbbf24);
+        }
+
+        .risk-thermometer-fill.risk-level-high {
+            background: linear-gradient(to top, #c0392b, #ef4444);
+        }
+
+        .risk-thermometer-bulb {
+            position: absolute;
+            bottom: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid #dfe3e8;
+        }
+
+        .risk-thermometer-bulb.risk-level-low {
+            background: #16a34a;
+        }
+
+        .risk-thermometer-bulb.risk-level-medium {
+            background: #d97706;
+        }
+
+        .risk-thermometer-bulb.risk-level-high {
+            background: #c0392b;
+        }
+
+        .risk-summary-text .risk-level-value {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        .risk-summary-text .risk-level-value.risk-level-low {
+            color: #16a34a;
+        }
+
+        .risk-summary-text .risk-level-value.risk-level-medium {
+            color: #d97706;
+        }
+
+        .risk-summary-text .risk-level-value.risk-level-high {
+            color: #c0392b;
+        }
+
+        .risk-summary-text .risk-score-note {
+            font-size: 14px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .finding {
+            background: white;
+            padding: 25px;
+            margin-bottom: 18px;
+            border-radius: 14px;
+            border-left: 6px solid #1f5fbf;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .finding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .topic {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .risk {
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #eef3fa;
+            color: #1f5fbf;
+        }
+
+        /* Status badge colors — SAME topic-aware risk logic as the
+           thermometer (a "Yes" means something different on Storage &
+           Security vs. AI / Model Training), computed in app.py and
+           passed in as finding.badge_class. */
+
+        .risk.badge-green {
+            background: #e7f7ed;
+            color: #16a34a;
+        }
+
+        .risk.badge-amber {
+            background: #fdf3e0;
+            color: #b4760a;
+        }
+
+        .risk.badge-red {
+            background: #fbeaea;
+            color: #c0392b;
+        }
+
+        .risk.badge-grey {
+            background: #eef1f5;
+            color: #6b7280;
+        }
+
+        .finding-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .simple {
+            background: #f5f8fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .simple strong {
+            color: #1f5fbf;
+        }
+
+        /* ------------------------------ */
+        /* Evidence section                */
+        /* ------------------------------ */
+
+        .evidence-details {
+            margin-top: 18px;
+        }
+
+        .evidence-details summary {
+            cursor: pointer;
+            color: #1f5fbf;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .evidence-details summary:hover {
+            text-decoration: underline;
+        }
+
+        .evidence {
+            margin-top: 12px;
+            background: #f5f8fc;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .evidence strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .evidence blockquote {
+            margin: 12px 0;
+            padding-left: 15px;
+            border-left: 4px solid #1f5fbf;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .evidence a {
+            color: #1f5fbf;
+            word-break: break-all;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            border-left: 6px solid #d99a00;
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            background: #fff7df;
+            border-left: 5px solid #e5a900;
+            padding: 18px;
+            border-radius: 8px;
+            color: #765800;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- -------------------------------- -->
+    <!-- Header                           -->
+    <!-- -------------------------------- -->
+
+    <h1>
+        ⚖️ {{ query }} — Privacy & Terms Risk Report
+    </h1>
+
+
+    <!-- -------------------------------- -->
+    <!-- Search                           -->
+    <!-- -------------------------------- -->
+
+    <form
+        action="/legal-analysis"
+        method="get"
+        class="search-box"
+    >
+
+        <input
+            type="text"
+            name="query"
+            placeholder="Enter an app name, e.g. Apple, Instagram, WhatsApp..."
+            value="{{ query }}"
+            required
+        >
+
+        <button type="submit">
+            Analyze
+        </button>
+
+    </form>
+
+
+    <!-- -------------------------------- -->
+    <!-- Summary                          -->
+    <!-- -------------------------------- -->
+
+    <div class="summary">
+
+        <div class="summary-grid">
+
+            <div>
+
+                <div class="label">
+                    App
+                </div>
+
+                <div class="value">
+                    {{ analysis.app_name }}
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="label">
+                    Sources Reviewed
+                </div>
+
+                <div class="value">
+                    {{ sources }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- -------------------------------- -->
+    <!-- Risk thermometer                 -->
+    <!-- -------------------------------- -->
+
+    {% set risk_class = "risk-level-" ~ risk.level|lower %}
+
+    <div class="risk-summary">
+
+        <div class="risk-thermometer">
+            <div class="risk-thermometer-fill {{ risk_class }}"></div>
+        </div>
+
+        <div class="risk-thermometer-bulb {{ risk_class }}"></div>
+
+        <div class="risk-summary-text">
+
+            <div class="label">
+                Overall Privacy Risk
+            </div>
+
+            <div class="risk-level-value {{ risk_class }}">
+                {{ risk.level }}
+            </div>
+
+            <div class="risk-score-note">
+                Risk score: {{ risk.score }} / 100
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- -------------------------------- -->
+    <!-- Findings heading                 -->
+    <!-- -------------------------------- -->
+
+    <h2>
+        What this app does with your data
+    </h2>
+
+
+    <!-- -------------------------------- -->
+    <!-- Findings                         -->
+    <!-- -------------------------------- -->
+
+    {% if findings %}
+
+
+        {% for finding in findings %}
+
+
+            <div class="finding">
+
+
+                <!-- Topic + Status -->
+
+                <div class="finding-header">
+
+                    <div class="topic">
+                        {{ finding.topic }}
+                    </div>
+
+                    <div class="risk {{ finding.badge_class }}">
+                        {{ finding.status }}
+                    </div>
+
+                </div>
+
+
+                <!-- Main finding -->
+
+                <div class="finding-text">
+
+                    {{ finding.finding }}
+
+                </div>
+
+
+                <!-- Simple explanation -->
+
+                <div class="simple">
+
+                    <strong>
+                        In simple words:
+                    </strong>
+
+                    {{ finding.simple_explanation }}
+
+                </div>
+
+
+                <!-- -------------------------------- -->
+                <!-- Collapsed evidence                -->
+                <!-- -------------------------------- -->
+
+                <details class="evidence-details">
+
+                    <summary>
+                        Why does the report say this?
+                    </summary>
+
+
+                    <div class="evidence">
+
+                        <strong>
+                            Evidence from the policy
+                        </strong>
+
+
+                        <blockquote>
+
+                            {{ finding.evidence_quote }}
+
+                        </blockquote>
+
+
+                        {% if finding.evidence_source %}
+
+                            <a
+                                href="{{ finding.evidence_source }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View official source
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </details>
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <!-- -------------------------------- -->
+        <!-- No findings                       -->
+        <!-- -------------------------------- -->
+
+        <div class="empty">
+
+            {% if analysis.message %}
+
+                {{ analysis.message }}
+
+            {% else %}
+
+                No findings were generated from the available policy sources.
+
+            {% endif %}
+
+        </div>
+
+
+    {% endif %}
+
+
+    <!-- -------------------------------- -->
+    <!-- Disclaimer                       -->
+    <!-- -------------------------------- -->
+
+    <div class="disclaimer">
+
+        <strong>
+            Disclaimer:
+        </strong>
+
+        This report summarizes information found in the app's
+        published policies. It is provided for informational purposes
+        and does not constitute legal advice.
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
