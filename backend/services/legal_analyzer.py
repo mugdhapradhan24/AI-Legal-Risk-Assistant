@@ -173,6 +173,8 @@ TOPIC_PHRASES = {
         "support": [
             "training", "train", "generative ai", "foundation model",
             "model", "prompt", "customer data", "content", "permission",
+            "develop and improve", "developing and improving",
+            "improve ai", "improving ai",
         ],
     },
     "Government / Legal Disclosure": {
@@ -459,6 +461,91 @@ def _phrase_score(
     return score
 
 
+QUOTE_FOCUS_TRIGGER_CHARS = 600
+QUOTE_FOCUS_BEFORE = 150
+QUOTE_FOCUS_AFTER = 420
+
+# First place in a long passage where each topic is actually being talked
+# about. Used only to decide WHERE to cut a very long quote for display.
+_QUOTE_FOCUS_ANCHORS = {
+    "Photos & Videos": r"photo|video|image|camera",
+    "Messages & Text": r"message",
+    "Personal Data": r"information we collect|we collect|personal (?:data|information)",
+    "Data Sharing": r"who we share|we share|share information|third part|partners|vendors|service providers",
+    "AI / Model Training": r"\bai\b|generative|machine learning|train|\bmodels?\b",
+    "Government / Legal Disclosure": r"law enforcement|legal request|government|warrant|subpoena|court order",
+    "Storage & Security": r"encrypt|safeguard|authenticat|two-factor",
+    "Retention & Deletion": r"retain|retention|delet",
+}
+
+
+def _focus_quote(quote: str, topic: str) -> str:
+    """
+    DISPLAY-ONLY. Very long list-style passages (a 250-word run of bullet
+    items) bury the one clause that actually matters. When a quote is
+    long, return a verbatim window around the topic's first key phrase,
+    marked with "..." where text was cut. The status was already decided
+    from the full quote before this runs, so this cannot change a verdict,
+    only how much surrounding noise the reader has to wade through.
+    """
+    quote = str(quote or "").strip()
+
+    if len(quote) <= QUOTE_FOCUS_TRIGGER_CHARS:
+        return quote
+
+    pattern = _QUOTE_FOCUS_ANCHORS.get(topic)
+    if not pattern:
+        return quote
+
+    match = re.search(pattern, quote, flags=re.IGNORECASE)
+    if not match:
+        return quote
+
+    start = max(0, match.start() - QUOTE_FOCUS_BEFORE)
+    end = min(len(quote), match.start() + QUOTE_FOCUS_AFTER)
+
+    # Snap both edges to word boundaries so we never cut mid-word.
+    if start > 0:
+        next_space = quote.find(" ", start)
+        if next_space != -1 and next_space < match.start():
+            start = next_space + 1
+
+    if end < len(quote):
+        prev_space = quote.rfind(" ", match.start(), end)
+        if prev_space != -1:
+            end = prev_space
+
+    window = quote[start:end].strip()
+    prefix = "... " if start > 0 else ""
+    suffix = " ..." if end < len(quote) else ""
+
+    return f"{prefix}{window}{suffix}"
+
+
+def _has_topic_signal(text: str, topic: str) -> bool:
+    """
+    True only if the sentence contains at least one topic-specific
+    strong/support phrase.
+
+    Why this exists: _phrase_score() also awards points for generic
+    action verbs ("use", "provide", "share"), so a sentence with NO
+    topic words at all could still score > 0 and win by default when
+    better evidence wasn't available. That's how a cookie-usage sentence
+    ended up as the "finding" for Photos & Videos and Messages & Text on
+    the deployed app, where the richer policy page hadn't loaded.
+    """
+    lowered = _normalize_text(text)
+    config = TOPIC_PHRASES[topic]
+
+    if topic == "AI / Model Training" and re.search(r"\bai\b", lowered):
+        return True
+
+    return (
+        any(phrase in lowered for phrase in config["strong"])
+        or any(phrase in lowered for phrase in config["support"])
+    )
+
+
 def _infer_scope(
     app_name: str,
     topic: str,
@@ -578,6 +665,7 @@ def _practice_from_quote(
             r"\btrain\b",
             r"\btraining\b",
             r"\bused for\b",
+            r"\bdevelop(?:ing)? and improv(?:e|ing)\b",
         ],
     }
 
@@ -832,9 +920,19 @@ def is_topic_eligible(topic: str, text: str) -> bool:
             "machine learning", "model", "models"
         ]
 
+        # Real policies often say "AI" on its own and describe training as
+        # "develop and improve" rather than "train". Meta's actual line is
+        # "Develop and improve AI at Meta for Meta Products and for third
+        # parties" - it contains none of the older ai_terms/training_terms
+        # above, so the strongest AI disclosure on the page was being
+        # rejected at this gate before it was ever scored.
+        has_bare_ai = re.search(r"\bai\b", t) is not None
+
         training_terms = [
             "train", "training", "improve our models",
-            "model improvement"
+            "model improvement",
+            "develop and improve", "developing and improving",
+            "improve ai", "improving ai", "fine-tun",
         ]
 
         data_terms = [
@@ -846,7 +944,7 @@ def is_topic_eligible(topic: str, text: str) -> bool:
         ]
 
         return (
-            any(term in t for term in ai_terms)
+            (any(term in t for term in ai_terms) or has_bare_ai)
             and any(term in t for term in training_terms)
             and any(term in t for term in data_terms)
         )
@@ -940,6 +1038,7 @@ def select_best_evidence(
 
     # Checked once per call, not once per sentence.
     STRICT_TOPICS = {
+        "Photos & Videos",
         "AI / Model Training",
         "Storage & Security",
         "Retention & Deletion",
@@ -1033,6 +1132,11 @@ def select_best_evidence(
                     sentence,
                 ):
                     continue
+
+            # Must actually mention something about THIS topic —
+            # generic verbs alone are not enough.
+            if not _has_topic_signal(sentence, topic):
+                continue
 
             # --------------------------------------------------
             # Score every surviving sentence
@@ -1381,9 +1485,17 @@ def analyze_text(
             )
             continue
 
+        # Status is already decided from the FULL quote above. From here
+        # on the quote is only used for display and as rewrite input, so
+        # trim very long list-style passages to the relevant window.
         # Needs an LLM rewrite — defer to the concurrent batch below
         # instead of calling it here and blocking the loop.
-        rewrite_jobs[topic] = (status, quote, scope, selected)
+        rewrite_jobs[topic] = (
+            status,
+            _focus_quote(quote, topic),
+            scope,
+            selected,
+        )
 
     # ---- Pass 2: run all needed OpenAI rewrite calls CONCURRENTLY ----
     # Previously each of up to 8 topics made this call one after another,

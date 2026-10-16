@@ -1,0 +1,85 @@
+{
+  "query": "instagram",
+  "sources": 4,
+  "generated_at": "2026-10-16",
+  "analysis": {
+    "app_name": "instagram",
+    "findings": [
+      {
+        "topic": "Photos & Videos",
+        "status": "Limited",
+        "finding": "Instagram collects information about how users interact with the app, including actions taken, purchases made, hashtags used, and any photos or videos provided for account support.",
+        "conditions": [],
+        "simple_explanation": "Instagram gathers details on how you use the app, what you buy, the hashtags you use, and any photos or videos you send them for help with your account.",
+        "evidence_quote": "... how you interact with it Apps and features you use, and what actions you take in them Purchases or other transactions you make Hashtags you use Your photo or video selfie if you provide it when you contact us for account support Friends, followers and other connections App, browser and device information : Device characteristics and device software What you’re doing on your device, like whether our app is in the foreground or if your mouse is moving (which can help tell humans from bots) Identifiers that tell your device apart from other users’ Device signals ...",
+        "evidence_source": "https://privacycenter.instagram.com/policy"
+      },
+      {
+        "topic": "Messages & Text",
+        "status": "Limited",
+        "finding": "Keep your conversations secure Start end-to-end encrypted chats so that only you and whoever you’re talking to can see your messages.",
+        "conditions": [],
+        "simple_explanation": "You can have secure chats where only you and the person you're talking to can read the messages.",
+        "evidence_quote": "Keep your conversations secure Start end-to-end encrypted chats so that only you and whoever you’re talking to can see your messages.",
+        "evidence_source": "https://privacycenter.instagram.com/dialog/global-safety-guide-compelled_access/"
+      },
+      {
+        "topic": "Personal Data",
+        "status": "Limited",
+        "finding": "Here's the information we collect: Your activity and information you provide, Friends, followers and other connections, App, browser and device information, Information from partners, vendors and other third parties.",
+        "conditions": [],
+        "simple_explanation": "We collect your activity and information you provide, details about your friends and followers, information about the app, browser, and device you use, and data from partners and other third parties.",
+        "evidence_quote": "Here's the information we collect: Your activity and information you provide Friends, followers and other connections App, browser and device information Information from partners, vendors and other third parties What if you don’t let us collect certain information?",
+        "evidence_source": "https://privacycenter.instagram.com/policy"
+      },
+      {
+        "topic": "Data Sharing",
+        "status": "Yes",
+        "finding": "Here’s more detail about who we share information with: Partners Advertisers and Audience Network publishers Partners who use our analytics services Partners who offer goods or services on our Products and commerce services platforms Integrated partners Vendors Measurement vendors Marketing vendors Service providers Service providers Third parties External researchers AI integrations Other third parties We also share information with other third parties in response to legal requests, to comply with applicable law or to prevent harm.",
+        "conditions": [],
+        "simple_explanation": "Instagram shares information with various partners, advertisers, service providers, and third parties, including in response to legal requests or to comply with laws.",
+        "evidence_quote": "Here’s more detail about who we share information with: Partners Advertisers and Audience Network publishers Partners who use our analytics services Partners who offer goods or services on our Products and commerce services platforms Integrated partners Vendors Measurement vendors Marketing vendors Service providers Service providers Third parties External researchers AI integrations Other third parties We also share information with other third parties in response to legal requests, to comply with applicable law or to prevent harm.",
+        "evidence_source": "https://privacycenter.instagram.com/policy"
+      },
+      {
+        "topic": "AI / Model Training",
+        "status": "Limited",
+        "finding": "... your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Developing and improving AI at Meta Why and how we process your information: Develop and improve AI at Meta for Meta Products and for third parties. Information categories we use (see ' What Information do we collect?",
+        "conditions": [],
+        "simple_explanation": "The company uses various types of information, including your IP address and data from cookies and partners, to develop and improve AI for its products and for third parties.",
+        "evidence_quote": "... your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Developing and improving AI at Meta Why and how we process your information: Develop and improve AI at Meta for Meta Products and for third parties. Information categories we use (see ' What Information do we collect?",
+        "evidence_source": "https://privacycenter.instagram.com/policy"
+      },
+      {
+        "topic": "Government / Legal Disclosure",
+        "status": "Limited",
+        "finding": "We access, preserve, use and share your information: In response to legal requests, like search warrants, court orders, production orders or subpoenas. These requests come from third parties such as civil litigants, law enforcement and other government authorities.",
+        "conditions": [
+          "In accordance with applicable law",
+          "To promote the safety, security and integrity of Meta Products, users, employees, property and the public."
+        ],
+        "simple_explanation": "Instagram may share your information with government or law enforcement if they receive legal requests like search warrants or subpoenas, while also following the law and aiming to keep users and the public safe.",
+        "evidence_quote": "Highlights We access, preserve, use and share your information: In response to legal requests, like search warrants, court orders, production orders or subpoenas. These requests come from third parties such as civil litigants, law enforcement and other government authorities. Learn more about when we respond to legal requests. In accordance with applicable law To promote the safety, security and integrity of Meta Products , users, employees, property and the public.",
+        "evidence_source": "https://privacycenter.instagram.com/policy"
+      },
+      {
+        "topic": "Storage & Security",
+        "status": "Limited",
+        "finding": "We build privacy into our products Private messaging Our messaging products offer end-to-end encryption so your conversations stay safe and secure.",
+        "conditions": [],
+        "simple_explanation": "Instagram's messaging products use end-to-end encryption to keep your conversations safe and secure.",
+        "evidence_quote": "We build privacy into our products Private messaging Our messaging products offer end-to-end encryption so your conversations stay safe and secure.",
+        "evidence_source": "https://privacycenter.instagram.com/"
+      },
+      {
+        "topic": "Retention & Deletion",
+        "status": "Yes",
+        "finding": "We offer you a variety of tools to view, manage, download and delete your information below.",
+        "conditions": [],
+        "simple_explanation": "You have different tools available to see, manage, download, and delete your information.",
+        "evidence_quote": "Highlights We offer you a variety of tools to view, manage, download and delete your information below.",
+        "evidence_source": "https://privacycenter.instagram.com/policy"
+      }
+    ]
+  }
+}
