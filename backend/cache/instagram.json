@@ -1,83 +1,80 @@
 {
   "query": "instagram",
   "sources": 4,
-  "generated_at": "2026-10-16",
+  "generated_at": "2026-10-19",
   "analysis": {
     "app_name": "instagram",
     "findings": [
       {
         "topic": "Photos & Videos",
         "status": "Limited",
-        "finding": "Instagram collects information about how users interact with the app, including actions taken, purchases made, hashtags used, and any photos or videos provided for account support.",
+        "finding": "Instagram facilitates the sharing of content and status, provides messaging services, and uses photos and videos for features related to AI at Meta, analytics, and advertising products.",
         "conditions": [],
-        "simple_explanation": "Instagram gathers details on how you use the app, what you buy, the hashtags you use, and any photos or videos you send them for help with your account.",
-        "evidence_quote": "... how you interact with it Apps and features you use, and what actions you take in them Purchases or other transactions you make Hashtags you use Your photo or video selfie if you provide it when you contact us for account support Friends, followers and other connections App, browser and device information : Device characteristics and device software What you’re doing on your device, like whether our app is in the foreground or if your mouse is moving (which can help tell humans from bots) Identifiers that tell your device apart from other users’ Device signals ...",
+        "simple_explanation": "Instagram uses your photos and videos to help share content, provide messaging services, and for advertising and analytics purposes.",
+        "evidence_quote": "... your information Facilitate the sharing of content and status Provide and curate features Provide messaging services, the ability to make voice and video calls and connect with others Provide advertising products Provide our features that are part of AI at Meta that do things like create and understand content (like text, audio, images and videos) and perform actions Undertake analytics Facilitate your purchases and payments on Meta Pay or other Meta checkout experiences See if our Products are working correctly, such as troubleshooting, and fixing it when it’s ...",
         "evidence_source": "https://privacycenter.instagram.com/policy"
       },
       {
         "topic": "Messages & Text",
         "status": "Limited",
-        "finding": "Keep your conversations secure Start end-to-end encrypted chats so that only you and whoever you’re talking to can see your messages.",
+        "finding": "Keep your conversations secure Start end-to-end encrypted chats so that only you and whoever you’re talking to can see your messages. Messenger Keep your conversations private You can set a timer to have messages disappear after they’re seen to help protect sensitive conversations.",
         "conditions": [],
-        "simple_explanation": "You can have secure chats where only you and the person you're talking to can read the messages.",
-        "evidence_quote": "Keep your conversations secure Start end-to-end encrypted chats so that only you and whoever you’re talking to can see your messages.",
+        "simple_explanation": "You can have secure chats that only you and the other person can see, and you can make messages disappear after they are read to keep conversations private.",
+        "evidence_quote": "Keep your conversations secure Start end-to-end encrypted chats so that only you and whoever you’re talking to can see your messages. Messenger Keep your conversations private You can set a timer to have messages disappear after they’re seen to help protect sensitive conversations.",
         "evidence_source": "https://privacycenter.instagram.com/dialog/global-safety-guide-compelled_access/"
       },
       {
         "topic": "Personal Data",
         "status": "Limited",
-        "finding": "Here's the information we collect: Your activity and information you provide, Friends, followers and other connections, App, browser and device information, Information from partners, vendors and other third parties.",
+        "finding": "For example, information like content and messages you or others exchange with these features Types of content you view or interact with, and how you interact with it Apps and features you use, and what actions you take in them Purchases or other transactions you make, including truncated credit card information Hashtags you use The time, frequency and duration of your activities on our Products Your photo or video selfie if you provide it when you contact us for account support Friends, followers and other connections App, browser and device information : Device characteristics and device software What you’re doing on your device, like whether our app is in the foreground or if your mouse is moving (which can help tell humans from bots) Identifiers that tell your device apart from other users’ Device signals Information you’ve shared through your device settings Location-related information Information about the network you connect your device to, including your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Communicating with you Why and how we process your information: We use information you’ve given us (like contact information on your profile) to send you a communication, like an e-mail or in-product notice, for example: We’ll contact you via email or in-product notifications in relation to the Meta Products, product-related issues, research or to let you know about our terms and policies. The actual information we use depends on your factual circumstances, but could include any of the following: Your activity and information you provide : Contact information on your profile and your communications with us Content you create, like posts, comments or audio Content you provide through our camera feature or your camera roll settings, or through our voice-enabled features App, browser and device information : Device characteristics and device software What you’re doing on your device, like whether our app is in the foreground or if your mouse is moving (which can help tell humans from bots) Identifiers that tell your device apart from other users’ Device signals Information you’ve shared through your device settings Location-related information Information about the network you connect your device to, including your IP address Information from cookies and similar technologies.",
         "conditions": [],
-        "simple_explanation": "We collect your activity and information you provide, details about your friends and followers, information about the app, browser, and device you use, and data from partners and other third parties.",
-        "evidence_quote": "Here's the information we collect: Your activity and information you provide Friends, followers and other connections App, browser and device information Information from partners, vendors and other third parties What if you don’t let us collect certain information?",
+        "simple_explanation": "Instagram collects various types of personal data, including messages, content interactions, app usage, purchases, location information, device details, and more.",
+        "evidence_quote": "For example, information like content and messages you or others exchange with these features Types of content you view or interact with, and how you interact with it Apps and features you use, and what actions you take in them Purchases or other transactions you make, including truncated credit card information Hashtags you use The time, frequency and duration of your activities on our Products Your photo or video selfie if you provide it when you contact us for account support Friends, followers and other connections App, browser and device information : Device characteristics and device software What you’re doing on your device, like whether our app is in the foreground or if your mouse is moving (which can help tell humans from bots) Identifiers that tell your device apart from other users’ Device signals Information you’ve shared through your device settings Location-related information Information about the network you connect your device to, including your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Communicating with you Why and how we process your information: We use information you’ve given us (like contact information on your profile) to send you a communication, like an e-mail or in-product notice, for example: We’ll contact you via email or in-product notifications in relation to the Meta Products, product-related issues, research or to let you know about our terms and policies. The actual information we use depends on your factual circumstances, but could include any of the following: Your activity and information you provide : Contact information on your profile and your communications with us Content you create, like posts, comments or audio Content you provide through our camera feature or your camera roll settings, or through our voice-enabled features App, browser and device information : Device characteristics and device software What you’re doing on your device, like whether our app is in the foreground or if your mouse is moving (which can help tell humans from bots) Identifiers that tell your device apart from other users’ Device signals Information you’ve shared through your device settings Location-related information Information about the network you connect your device to, including your IP address Information from cookies and similar technologies.",
         "evidence_source": "https://privacycenter.instagram.com/policy"
       },
       {
         "topic": "Data Sharing",
-        "status": "Yes",
-        "finding": "Here’s more detail about who we share information with: Partners Advertisers and Audience Network publishers Partners who use our analytics services Partners who offer goods or services on our Products and commerce services platforms Integrated partners Vendors Measurement vendors Marketing vendors Service providers Service providers Third parties External researchers AI integrations Other third parties We also share information with other third parties in response to legal requests, to comply with applicable law or to prevent harm.",
+        "status": "Limited",
+        "finding": "We share information with partners, advertisers, audience network publishers, partners using our analytics services, vendors, measurement vendors, marketing vendors, service providers, external researchers, AI integrations, and other third parties.",
         "conditions": [],
-        "simple_explanation": "Instagram shares information with various partners, advertisers, service providers, and third parties, including in response to legal requests or to comply with laws.",
-        "evidence_quote": "Here’s more detail about who we share information with: Partners Advertisers and Audience Network publishers Partners who use our analytics services Partners who offer goods or services on our Products and commerce services platforms Integrated partners Vendors Measurement vendors Marketing vendors Service providers Service providers Third parties External researchers AI integrations Other third parties We also share information with other third parties in response to legal requests, to comply with applicable law or to prevent harm.",
+        "simple_explanation": "We share your information with various partners and service providers, including advertisers and vendors.",
+        "evidence_quote": "Here’s more detail about who we share information with: Partners Advertisers and Audience Network publishers Partners who use our analytics services Partners who offer goods or services on our Products and commerce services platforms Integrated partners Vendors Measurement vendors Marketing vendors Service providers Service providers Third parties External researchers AI integrations Other third parties We also share information with other ...",
         "evidence_source": "https://privacycenter.instagram.com/policy"
       },
       {
         "topic": "AI / Model Training",
         "status": "Limited",
-        "finding": "... your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Developing and improving AI at Meta Why and how we process your information: Develop and improve AI at Meta for Meta Products and for third parties. Information categories we use (see ' What Information do we collect?",
+        "finding": "... your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Developing and improving AI at Meta Why and how we process your information: Develop and improve AI at Meta for Meta Products and for third parties. The actual information we use depends on your factual circumstances, but could include any of the following: Your activity and information you provide : Public content you or others create or share, like posts, comments or audio on Meta Products Interactions with our features that are part of ...",
         "conditions": [],
-        "simple_explanation": "The company uses various types of information, including your IP address and data from cookies and partners, to develop and improve AI for its products and for third parties.",
-        "evidence_quote": "... your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Developing and improving AI at Meta Why and how we process your information: Develop and improve AI at Meta for Meta Products and for third parties. Information categories we use (see ' What Information do we collect?",
+        "simple_explanation": "The company uses various types of information, including your IP address and public content you create or share, to develop and improve AI for its products and for third parties.",
+        "evidence_quote": "... your IP address Information from cookies and similar technologies Information from partners, vendors and third parties Developing and improving AI at Meta Why and how we process your information: Develop and improve AI at Meta for Meta Products and for third parties. The actual information we use depends on your factual circumstances, but could include any of the following: Your activity and information you provide : Public content you or others create or share, like posts, comments or audio on Meta Products Interactions with our features that are part of ...",
         "evidence_source": "https://privacycenter.instagram.com/policy"
       },
       {
         "topic": "Government / Legal Disclosure",
         "status": "Limited",
         "finding": "We access, preserve, use and share your information: In response to legal requests, like search warrants, court orders, production orders or subpoenas. These requests come from third parties such as civil litigants, law enforcement and other government authorities.",
-        "conditions": [
-          "In accordance with applicable law",
-          "To promote the safety, security and integrity of Meta Products, users, employees, property and the public."
-        ],
-        "simple_explanation": "Instagram may share your information with government or law enforcement if they receive legal requests like search warrants or subpoenas, while also following the law and aiming to keep users and the public safe.",
-        "evidence_quote": "Highlights We access, preserve, use and share your information: In response to legal requests, like search warrants, court orders, production orders or subpoenas. These requests come from third parties such as civil litigants, law enforcement and other government authorities. Learn more about when we respond to legal requests. In accordance with applicable law To promote the safety, security and integrity of Meta Products , users, employees, property and the public.",
+        "conditions": [],
+        "simple_explanation": "The company may share your information with government or law enforcement if they receive legal requests like search warrants or subpoenas.",
+        "evidence_quote": "Highlights We access, preserve, use and share your information: In response to legal requests, like search warrants, court orders, production orders or subpoenas. These requests come from third parties such as civil litigants, law enforcement and other government authorities. Learn more about when we respond to legal requests. For example, information like content and messages you or others exchange with these features Types of content you view or interact with, and how you interact with it ...",
         "evidence_source": "https://privacycenter.instagram.com/policy"
       },
       {
         "topic": "Storage & Security",
         "status": "Limited",
-        "finding": "We build privacy into our products Private messaging Our messaging products offer end-to-end encryption so your conversations stay safe and secure.",
+        "finding": "Our messaging products offer end-to-end encryption so your conversations stay safe and secure.",
         "conditions": [],
-        "simple_explanation": "Instagram's messaging products use end-to-end encryption to keep your conversations safe and secure.",
+        "simple_explanation": "Instagram's messaging features use end-to-end encryption to keep your conversations private and secure.",
         "evidence_quote": "We build privacy into our products Private messaging Our messaging products offer end-to-end encryption so your conversations stay safe and secure.",
         "evidence_source": "https://privacycenter.instagram.com/"
       },
       {
         "topic": "Retention & Deletion",
         "status": "Yes",
-        "finding": "We offer you a variety of tools to view, manage, download and delete your information below.",
+        "finding": "We keep information as long as we need it to provide our Products, comply with legal obligations or protect our or other’s interests.",
         "conditions": [],
-        "simple_explanation": "You have different tools available to see, manage, download, and delete your information.",
-        "evidence_quote": "Highlights We offer you a variety of tools to view, manage, download and delete your information below.",
+        "simple_explanation": "Instagram retains information for as long as necessary to offer its services, meet legal requirements, or safeguard its interests and those of others.",
+        "evidence_quote": "Highlights We keep information as long as we need it to provide our Products, comply with legal obligations or protect our or other’s interests.",
         "evidence_source": "https://privacycenter.instagram.com/policy"
       }
     ]

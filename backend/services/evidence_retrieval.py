@@ -103,6 +103,8 @@ TOPIC_CONFIG = {
             "foundation model", "foundation models", "large language model",
             "large language models", "user interactions",
             "publicly available data", "licensed data", "synthetic data",
+            "develop and improve ai", "developing and improving ai",
+            "improve ai", "ai at meta",
         ],
         "preferred_url_terms": [
             "/ai", "/artificial-intelligence", "/model", "/training",
@@ -177,6 +179,8 @@ TOPIC_CONFIG = {
             "delete your information", "data deletion", "deletion",
             "delete account", "delete your account", "account deletion",
             "request deletion", "right to deletion", "right to delete",
+            "we keep information", "keep information",
+            "how long do we keep", "legal obligations",
         ],
         "preferred_url_terms": [
             "/privacy", "/legal/privacy", "/privacy-policy", "/delete",
@@ -529,6 +533,67 @@ def select_topic_sources(policy_pages, topic, max_sources=3):
 
     return selected
 
+def extract_relevant_passages(content, topic, max_passages=8):
+    if not content:
+        return ""
+
+    # Split policy text into smaller passages.
+    chunks = re.split(
+        r"(?<=[.!?])\s+|\n{2,}",
+        str(content)
+    )
+
+    keywords = TOPIC_CONFIG.get(topic, {}).get("keywords", [])
+
+    retention_priority = [
+        "how long", "retain for", "retained for",
+        "retention period", "keep your information",
+        "keep information", "until you delete",
+        "after you delete", "after deletion",
+        "deletion process", "days", "months",
+        "years", "legal obligation",
+        "legal requirements", "backup",
+    ]
+
+    scored = []
+
+    for index, chunk in enumerate(chunks):
+        chunk = chunk.strip()
+
+        if len(chunk) < 35:
+            continue
+
+        lower = chunk.lower()
+
+        matches = [
+            keyword for keyword in keywords
+            if keyword in lower
+        ]
+
+        score = len(matches) * 2
+
+        if topic == "Retention & Deletion":
+            score += sum(
+                5 for phrase in retention_priority
+                if phrase in lower
+            )
+
+            # Generic deletion-tool statements are weaker evidence.
+            if "tools to view" in lower:
+                score -= 8
+
+        if score > 0:
+            scored.append((score, index, chunk))
+
+    scored.sort(key=lambda item: (-item[0], item[1]))
+
+    selected = sorted(
+        scored[:max_passages],
+        key=lambda item: item[1]
+    )
+
+    return "\n\n".join(item[2] for item in selected)
+
 
 # ============================================================
 # EVIDENCE BUILDING
@@ -546,6 +611,12 @@ def build_topic_evidence(policy_pages, topic):
         title = page.get("title", "")
         url = page.get("url", "")
         content = page.get("content", "")
+
+        content = extract_relevant_passages(content, topic)
+        # Page-level relevance alone is insufficient: navigation pages often
+        # score highly despite containing no relevant passages.
+        if not content.strip():
+            continue
 
         topic_score = calculate_topic_score(page, topic)
         source_scope = classify_source_scope(page)

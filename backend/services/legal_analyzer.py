@@ -235,6 +235,7 @@ TOPIC_PHRASES = {
         "support": [
             "retain", "retained", "retention", "delete", "deleted",
             "deletion", "backup", "months", "years", "anonymized",
+            "we keep information", "keep information", "keep your information",
             "anonymised",
         ],
     },
@@ -389,20 +390,31 @@ def _sentence_split(text: str) -> list[str]:
     requirement) and keep any resulting piece that is NOT itself noisy.
     This is additive — it doesn't remove or alter anything else.
     """
-    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    text = str(text or "").strip()
 
     if not text:
         return []
 
-    parts = re.split(
-        r"(?<=[.!?])\s+(?=[A-Z0-9\"'])",
-        text,
-    )
+    # The retriever separates relevant passages with blank lines. Preserve
+    # those boundaries instead of merging unrelated headings and facts.
+    paragraphs = re.split(r"\n\s*\n+", text)
+    parts = []
+    for paragraph in paragraphs:
+        paragraph = re.sub(r"\s+", " ", paragraph).strip()
+        parts.extend(re.split(r"(?<=[.!?])\s+(?=[A-Z0-9\"'])", paragraph))
 
     sentences = []
 
     for part in parts:
         part = part.strip()
+
+        # JS-rendered policy pages sometimes prepend a table-of-contents
+        # label to a factual sentence with no punctuation between them.
+        # Strip only known navigational prefixes, never the actual claim.
+        part = re.sub(
+            r"^.*?\bHighlights\s+(?=(?:We|Our|Your|Information)\s)",
+            "", part, flags=re.IGNORECASE,
+        ) if "more resources" in part.lower() else part
 
         if len(part) < 20:
             continue
@@ -1119,6 +1131,16 @@ def select_best_evidence(
             if (
                 explicitly_other_product
                 and not mentions_current_product
+            ):
+                continue
+
+            # Cross-product protection: Instagram privacy-center pages can
+            # include Messenger feature copy. Never attribute those features
+            # to Instagram without independent Instagram-specific evidence.
+            if (
+                current_app == "instagram"
+                and topic in {"Messages & Text", "Storage & Security"}
+                and re.search(r"\bmessenger\b|\bvanish mode\b", sentence_lower)
             ):
                 continue
 
